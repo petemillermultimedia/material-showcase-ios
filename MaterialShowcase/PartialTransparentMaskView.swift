@@ -29,7 +29,7 @@ class PartialTransparentMaskView: UIView {
                     context.addEllipse(in: circle);
                     context.clip();
                     context.clear(circle);
-                    contextSetFillColor(UIColor.clear.CGColor)
+                    context.SetFillColor(UIColor.clear.CGColor)
                     contextFill(circle);
                 }
             }
