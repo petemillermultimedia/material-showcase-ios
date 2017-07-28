@@ -182,7 +182,7 @@ extension MaterialShowcase {
     addBackground(at: center)
     addTargetRipple(at: center)
     addTargetHolder(at: center)
-    addTarget(at: center)
+    //addTarget(at: center)
     addPrimaryLabel(at: center)
     addSecondaryLabel(at: center)
     
