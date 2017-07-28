@@ -19,19 +19,19 @@ class PartialTransparentMaskView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func drawRect(_ rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         backgroundColor?.setFill()
         UIRectFill(rect)
 
         if let circle = cutoutRect {
-            let context = UIGraphicsGetCurrentContext();
-
-            if( CGRectIntersectsRect( circle, rect ) ) {
-               CGContextAddEllipseInRect(context, circle);
-               context.clip();
-               CGContextClearRect(context, circle);
-               CGContextSetFillColorWithColor( context!, UIColor.clearColor().CGColor)
-               CGContextFillRect( context, circle);
+            if let context = UIGraphicsGetCurrentContext() {
+                if( rect.intersects( circle ) ) {
+                    CGContextAddEllipseInRect(context, circle);
+                    context.clip();
+                    CGContextClearRect(context, circle);
+                    CGContextSetFillColorWithColor( context, UIColor.clearColor().CGColor)
+                    CGContextFillRect( context, circle);
+                }
             }
         }
     }
