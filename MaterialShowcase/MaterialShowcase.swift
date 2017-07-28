@@ -181,7 +181,7 @@ extension MaterialShowcase {
     
     addBackground(at: center)
     addTargetRipple(at: center)
-    addTargetHolder(at: center)
+//    addTargetHolder(at: center)
     //addTarget(at: center)
     addPrimaryLabel(at: center)
     addSecondaryLabel(at: center)
@@ -210,9 +210,12 @@ extension MaterialShowcase {
       radius = containerView.frame.width
     }
     
-    backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: radius * 2,height: radius * 2))
+    backgroundView = PartialTransparentMaskView(frame: CGRect(x: 0, y: 0, width: radius * 2,height: radius * 2),
+                                                backgroundColor: backgroundPromptColor.withAlphaComponent(backgroundPromptColorAlpha),
+                                                cutout: CGRect(x: 0, y: 0, width: targetHolderRadius * 2,height: targetHolderRadius * 2))
+//    backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: radius * 2,height: radius * 2))
     backgroundView.center = center
-    backgroundView.backgroundColor = backgroundPromptColor.withAlphaComponent(backgroundPromptColorAlpha)
+//    backgroundView.backgroundColor = backgroundPromptColor.withAlphaComponent(backgroundPromptColorAlpha)
     backgroundView.asCircle()
     backgroundView.transform = CGAffineTransform(scaleX: 1/ANI_TARGET_HOLDER_SCALE, y: 1/ANI_TARGET_HOLDER_SCALE) // Initial set to support animation
     addSubview(backgroundView)
