@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 class PartialTransparentMaskView: UIView {
-    var cutoutRect: CGRect
+    var cutoutRect: CGRect?
 
     init(frame: CGRect, backgroundColor: UIColor?, cutout: CGRect?) {
         super.init(frame: frame)
@@ -11,14 +11,15 @@ class PartialTransparentMaskView: UIView {
             self.backgroundColor = backgroundColor
         }
 
-        self.opaque = false
+        cutoutRect = cutout
+        self.isOpaque = false
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func drawRect(rect: CGRect) {
+    override func drawRect(_ rect: CGRect) {
         backgroundColor?.setFill()
         UIRectFill(rect)
 
@@ -27,9 +28,9 @@ class PartialTransparentMaskView: UIView {
 
             if( CGRectIntersectsRect( circle, rect ) ) {
                CGContextAddEllipseInRect(context, circle);
-               CGContextClip(context);
+               context.clip();
                CGContextClearRect(context, circle);
-               CGContextSetFillColorWithColor( context, UIColor.clearColor().CGColor)
+               CGContextSetFillColorWithColor( context!, UIColor.clearColor().CGColor)
                CGContextFillRect( context, circle);
             }
         }
