@@ -26,11 +26,11 @@ class PartialTransparentMaskView: UIView {
         if let circle = cutoutRect {
             if let context = UIGraphicsGetCurrentContext() {
                 if( rect.intersects( circle ) ) {
-                    CGContextAddEllipseInRect(context, circle);
+                    context.addEllipse(in: circle);
                     context.clip();
-                    CGContextClearRect(context, circle);
-                    CGContextSetFillColorWithColor( context, UIColor.clearColor().CGColor)
-                    CGContextFillRect( context, circle);
+                    context.clear(circle);
+                    CGContextSetFillColorWithColor( context, UIColor.clear.CGColor)
+                    contextFill(circle);
                 }
             }
         }
