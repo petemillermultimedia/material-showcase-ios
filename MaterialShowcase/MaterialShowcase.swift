@@ -124,16 +124,18 @@ extension MaterialShowcase {
   
   // Finally, shows it
   public func show(completion handler: (()-> Void)?) {
-    alpha = 0.0
-    containerView.addSubview(self)
-    UIView.animate(withDuration: ANI_COMEIN_DURATION, delay: 0,
-                   options: [.curveEaseInOut],
-                   animations: { self.alpha = 1.0 },
-                   completion: nil)
+    if let _ = targetView {
+      alpha = 0.0
+      containerView.addSubview(self)
+      UIView.animate(withDuration: ANI_COMEIN_DURATION, delay: 0,
+                     options: [.curveEaseInOut],
+                     animations: { self.alpha = 1.0 },
+                     completion: nil)
     
-    // Handler user's action after showing.
-    if let handler = handler {
-      handler()
+      // Handler user's action after showing.
+      if let handler = handler {
+        handler()
+      }
     }
   }
 }
@@ -177,27 +179,29 @@ extension MaterialShowcase {
   // Overrides this to add subviews. They will be drawn when calling show()
   public override func layoutSubviews() {
     super.layoutSubviews()
-    let center = calculateCenter(at: targetView, to: containerView)
+    if let _ = targetView {
+      let center = calculateCenter(at: targetView, to: containerView)
     
-    addBackground(at: center)
-    addTargetRipple(at: center)
+      addBackground(at: center)
+      addTargetRipple(at: center)
 //    addTargetHolder(at: center)
-    //addTarget(at: center)
-    addPrimaryLabel(at: center)
-    addSecondaryLabel(at: center)
+      //addTarget(at: center)
+      addPrimaryLabel(at: center)
+      addSecondaryLabel(at: center)
     
-    // Add gesture recognizer for both container and its subview
-    addGestureRecognizer(tapGestureRecoganizer())
-    // Disable subview interaction to let users click to general view only
-    for subView in subviews {
-      subView.isUserInteractionEnabled = false
+      // Add gesture recognizer for both container and its subview
+      addGestureRecognizer(tapGestureRecoganizer())
+      // Disable subview interaction to let users click to general view only
+      for subView in subviews {
+        subView.isUserInteractionEnabled = false
+      }
+    
+      // Animation while displaying.
+      UIView.animate(withDuration: 0.5, delay: aniComeInDuration, options: [.repeat, .autoreverse, .curveEaseInOut], animations: {
+        self.targetRippleView.alpha = self.ANI_RIPPLE_ALPHA
+        self.targetRippleView.transform = CGAffineTransform(scaleX: self.aniRippleScale, y: self.aniRippleScale)
+      }, completion: nil)
     }
-    
-    // Animation while displaying.
-    UIView.animate(withDuration: 0.5, delay: aniComeInDuration, options: [.repeat, .autoreverse, .curveEaseInOut], animations: {
-      self.targetRippleView.alpha = self.ANI_RIPPLE_ALPHA
-      self.targetRippleView.transform = CGAffineTransform(scaleX: self.aniRippleScale, y: self.aniRippleScale)
-    }, completion: nil)
   }
   
   // Add background which is a big circle
