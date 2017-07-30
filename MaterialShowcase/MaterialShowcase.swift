@@ -42,10 +42,10 @@ public class MaterialShowcase: UIView {
   // MARK: Private view properties
   fileprivate var containerView: UIView!
   fileprivate var targetView: UIView!
-  fileprivate var backgroundView: UIView!
-  fileprivate var targetHolderView: UIView!
+  fileprivate var backgroundView: ViewWithCutout!
+//  fileprivate var targetHolderView: UIView!
   fileprivate var targetRippleView: UIView!
-  fileprivate var targetCopyView: UIView!
+//  fileprivate var targetCopyView: UIView!
   fileprivate var primaryLabel: UILabel!
   fileprivate var secondaryLabel: UILabel!
   
@@ -214,12 +214,11 @@ extension MaterialShowcase {
       radius = containerView.frame.width
     }
     
-    backgroundView = PartialTransparentMaskView(frame: CGRect(x: 0, y: 0, width: radius * 2,height: radius * 2),
-                                                backgroundColor: backgroundPromptColor.withAlphaComponent(backgroundPromptColorAlpha),
-                                                cutout: CGRect(x: 0, y: 0, width: targetHolderRadius * 2,height: targetHolderRadius * 2))
+    backgroundView = ViewWithCutout(frame: CGRect(x: 0, y: 0, width: radius * 2,height: radius * 2),
+                                    cutout: CGRect(x: 0, y: 0, width: targetHolderRadius * 2,height: targetHolderRadius * 2))
 //    backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: radius * 2,height: radius * 2))
     backgroundView.center = center
-//    backgroundView.backgroundColor = backgroundPromptColor.withAlphaComponent(backgroundPromptColorAlpha)
+    backgroundView.backgroundColor = backgroundPromptColor.withAlphaComponent(backgroundPromptColorAlpha)
     backgroundView.asCircle()
     backgroundView.transform = CGAffineTransform(scaleX: 1/ANI_TARGET_HOLDER_SCALE, y: 1/ANI_TARGET_HOLDER_SCALE) // Initial set to support animation
     addSubview(backgroundView)
@@ -242,46 +241,46 @@ extension MaterialShowcase {
   }
   
   // A circle-shape background view of target view
-  private func addTargetHolder(at center: CGPoint) {
-    targetHolderView = UIView(frame: CGRect(x: 0, y: 0, width: targetHolderRadius * 2,height: targetHolderRadius * 2))
-    targetHolderView.center = center
-    targetHolderView.backgroundColor = targetHolderColor
-    targetHolderView.asCircle()
-    targetHolderView.transform = CGAffineTransform(scaleX: 1/ANI_TARGET_HOLDER_SCALE, y: 1/ANI_TARGET_HOLDER_SCALE) // Initial set to support animation
-    addSubview(targetHolderView)
-    UIView.animate(withDuration: aniComeInDuration, delay: 0,
-                   options: [.curveLinear],
-                   animations: {
-                    self.targetHolderView.transform = CGAffineTransform(scaleX: 1, y: 1)
-    },
-                   completion: {
-                    _ in
-    })
-  }
+//   private func addTargetHolder(at center: CGPoint) {
+//     targetHolderView = UIView(frame: CGRect(x: 0, y: 0, width: targetHolderRadius * 2,height: targetHolderRadius * 2))
+//     targetHolderView.center = center
+//     targetHolderView.backgroundColor = targetHolderColor
+//     targetHolderView.asCircle()
+//     targetHolderView.transform = CGAffineTransform(scaleX: 1/ANI_TARGET_HOLDER_SCALE, y: 1/ANI_TARGET_HOLDER_SCALE) // Initial set to support animation
+//     addSubview(targetHolderView)
+//     UIView.animate(withDuration: aniComeInDuration, delay: 0,
+//                    options: [.curveLinear],
+//                    animations: {
+//                     self.targetHolderView.transform = CGAffineTransform(scaleX: 1, y: 1)
+//     },
+//                    completion: {
+//                     _ in
+//     })
+//   }
   
   // Create a copy view of target view
   // It helps us not to affect the original target view
-  private func addTarget(at center: CGPoint) {
-    targetCopyView = targetView.copyView() as! UIView
-    targetCopyView.tintColor = targetTintColor
+//   private func addTarget(at center: CGPoint) {
+//     targetCopyView = targetView.copyView() as! UIView
+//     targetCopyView.tintColor = targetTintColor
     
-    if targetCopyView is UIButton {
-        let button = targetView as! UIButton
-        let buttonCopy = targetCopyView as! UIButton
-        buttonCopy.setImage(button.image(for: .normal)?.withRenderingMode(.alwaysTemplate), for: .normal)
-    } else if targetCopyView is UIImageView {
-        let imageView = targetView as! UIImageView
-        let imageViewCopy = targetCopyView as! UIImageView
-        imageViewCopy.image = imageView.image?.withRenderingMode(.alwaysTemplate)
-    }
+//     if targetCopyView is UIButton {
+//         let button = targetView as! UIButton
+//         let buttonCopy = targetCopyView as! UIButton
+//         buttonCopy.setImage(button.image(for: .normal)?.withRenderingMode(.alwaysTemplate), for: .normal)
+//     } else if targetCopyView is UIImageView {
+//         let imageView = targetView as! UIImageView
+//         let imageViewCopy = targetCopyView as! UIImageView
+//         imageViewCopy.image = imageView.image?.withRenderingMode(.alwaysTemplate)
+//     }
     
-    let width = targetCopyView.frame.width
-    let height = targetCopyView.frame.height
-    targetCopyView.frame = CGRect(x: center.x - width/2, y: center.y - height/2, width: width, height: height)
-    targetCopyView.translatesAutoresizingMaskIntoConstraints = true
+//     let width = targetCopyView.frame.width
+//     let height = targetCopyView.frame.height
+//     targetCopyView.frame = CGRect(x: center.x - width/2, y: center.y - height/2, width: width, height: height)
+//     targetCopyView.translatesAutoresizingMaskIntoConstraints = true
     
-    addSubview(targetCopyView)
-  }
+//     addSubview(targetCopyView)
+//   }
   
   // Configures and adds primary label view
   private func addPrimaryLabel(at center: CGPoint) {
