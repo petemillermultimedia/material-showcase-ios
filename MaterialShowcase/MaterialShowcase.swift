@@ -183,8 +183,9 @@ extension MaterialShowcase {
       let center = calculateCenter(at: targetView, to: containerView)
     
       addBackground(at: center)
-      addTargetRipple(at: center)
-//    addTargetHolder(at: center)
+//      addTargetRipple(at: center)
+      
+      //addTargetHolder(at: center)
       //addTarget(at: center)
       addPrimaryLabel(at: center)
       addSecondaryLabel(at: center)
@@ -197,10 +198,10 @@ extension MaterialShowcase {
       }
     
       // Animation while displaying.
-      UIView.animate(withDuration: 0.5, delay: aniComeInDuration, options: [.repeat, .autoreverse, .curveEaseInOut], animations: {
-        self.targetRippleView.alpha = self.ANI_RIPPLE_ALPHA
-        self.targetRippleView.transform = CGAffineTransform(scaleX: self.aniRippleScale, y: self.aniRippleScale)
-      }, completion: nil)
+//      UIView.animate(withDuration: 0.5, delay: aniComeInDuration, options: [.repeat, .autoreverse, .curveEaseInOut], animations: {
+//        self.targetRippleView.alpha = self.ANI_RIPPLE_ALPHA
+//        self.targetRippleView.transform = CGAffineTransform(scaleX: self.aniRippleScale, y: self.aniRippleScale)
+//      }, completion: nil)
     }
   }
   
