@@ -43,9 +43,7 @@ public class MaterialShowcase: UIView {
   fileprivate var containerView: UIView!
   fileprivate var targetView: UIView!
   fileprivate var backgroundView: ViewWithCutout!
-//  fileprivate var targetHolderView: UIView!
   fileprivate var targetRippleView: UIView!
-//  fileprivate var targetCopyView: UIView!
   fileprivate var primaryLabel: UILabel!
   fileprivate var secondaryLabel: UILabel!
   
@@ -122,10 +120,17 @@ extension MaterialShowcase {
     targetHolderRadius = 0
   }
   
+  // Sets a UICollectionView as target
+  public func setTargetView(collectionView: UICollectionView, section: Int, row: Int) {
+      let indexPath = IndexPath(row: row, section: section)
+      targetView = collectionView.cellForItem(at: indexPath)
+  }
+
   // Finally, shows it
   public func show(completion handler: (()-> Void)?) {
     if let _ = targetView {
       alpha = 0.0
+
       containerView.addSubview(self)
       UIView.animate(withDuration: ANI_COMEIN_DURATION, delay: 0,
                      options: [.curveEaseInOut],
@@ -183,10 +188,7 @@ extension MaterialShowcase {
       let center = calculateCenter(at: targetView, to: containerView)
     
       addBackground(at: center)
-//      addTargetRipple(at: center)
-      
-      //addTargetHolder(at: center)
-      //addTarget(at: center)
+      addTargetRipple(at: center)      
       addPrimaryLabel(at: center)
       addSecondaryLabel(at: center)
     
@@ -198,10 +200,10 @@ extension MaterialShowcase {
       }
     
       // Animation while displaying.
-//      UIView.animate(withDuration: 0.5, delay: aniComeInDuration, options: [.repeat, .autoreverse, .curveEaseInOut], animations: {
-//        self.targetRippleView.alpha = self.ANI_RIPPLE_ALPHA
-//        self.targetRippleView.transform = CGAffineTransform(scaleX: self.aniRippleScale, y: self.aniRippleScale)
-//      }, completion: nil)
+      UIView.animate(withDuration: 0.5, delay: aniComeInDuration, options: [.repeat, .autoreverse, .curveEaseInOut], animations: {
+        self.targetRippleView.alpha = self.ANI_RIPPLE_ALPHA
+        self.targetRippleView.transform = CGAffineTransform(scaleX: self.aniRippleScale, y: self.aniRippleScale)
+      }, completion: nil)
     }
   }
   
@@ -214,14 +216,14 @@ extension MaterialShowcase {
     } else {
       radius = containerView.frame.width
     }
-    
+
     backgroundView = ViewWithCutout(frame: CGRect(x: 0, y: 0, width: radius * 2,height: radius * 2),
-                                    cutout: CGRect(x: 0, y: 0, width: targetHolderRadius * 2,height: targetHolderRadius * 2))
-//    backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: radius * 2,height: radius * 2))
-    backgroundView.center = center
+                                    cutout: CGRect(x: radius - targetHolderRadius, y: radius - targetHolderRadius,
+                                                   width: targetHolderRadius * 2,height: targetHolderRadius * 2))
     backgroundView.backgroundColor = backgroundPromptColor.withAlphaComponent(backgroundPromptColorAlpha)
     backgroundView.asCircle()
     backgroundView.transform = CGAffineTransform(scaleX: 1/ANI_TARGET_HOLDER_SCALE, y: 1/ANI_TARGET_HOLDER_SCALE) // Initial set to support animation
+    backgroundView.center = center
     addSubview(backgroundView)
     UIView.animate(withDuration: aniComeInDuration, delay: 0,
                    options: [.curveLinear],
@@ -240,49 +242,7 @@ extension MaterialShowcase {
     addSubview(targetRippleView)
     
   }
-  
-  // A circle-shape background view of target view
-//   private func addTargetHolder(at center: CGPoint) {
-//     targetHolderView = UIView(frame: CGRect(x: 0, y: 0, width: targetHolderRadius * 2,height: targetHolderRadius * 2))
-//     targetHolderView.center = center
-//     targetHolderView.backgroundColor = targetHolderColor
-//     targetHolderView.asCircle()
-//     targetHolderView.transform = CGAffineTransform(scaleX: 1/ANI_TARGET_HOLDER_SCALE, y: 1/ANI_TARGET_HOLDER_SCALE) // Initial set to support animation
-//     addSubview(targetHolderView)
-//     UIView.animate(withDuration: aniComeInDuration, delay: 0,
-//                    options: [.curveLinear],
-//                    animations: {
-//                     self.targetHolderView.transform = CGAffineTransform(scaleX: 1, y: 1)
-//     },
-//                    completion: {
-//                     _ in
-//     })
-//   }
-  
-  // Create a copy view of target view
-  // It helps us not to affect the original target view
-//   private func addTarget(at center: CGPoint) {
-//     targetCopyView = targetView.copyView() as! UIView
-//     targetCopyView.tintColor = targetTintColor
-    
-//     if targetCopyView is UIButton {
-//         let button = targetView as! UIButton
-//         let buttonCopy = targetCopyView as! UIButton
-//         buttonCopy.setImage(button.image(for: .normal)?.withRenderingMode(.alwaysTemplate), for: .normal)
-//     } else if targetCopyView is UIImageView {
-//         let imageView = targetView as! UIImageView
-//         let imageViewCopy = targetCopyView as! UIImageView
-//         imageViewCopy.image = imageView.image?.withRenderingMode(.alwaysTemplate)
-//     }
-    
-//     let width = targetCopyView.frame.width
-//     let height = targetCopyView.frame.height
-//     targetCopyView.frame = CGRect(x: center.x - width/2, y: center.y - height/2, width: width, height: height)
-//     targetCopyView.translatesAutoresizingMaskIntoConstraints = true
-    
-//     addSubview(targetCopyView)
-//   }
-  
+
   // Configures and adds primary label view
   private func addPrimaryLabel(at center: CGPoint) {
     primaryLabel = UILabel()
@@ -457,6 +417,7 @@ extension UIView{
   // Transform a view's shape into circle
   func asCircle(){
     self.layer.cornerRadius = self.frame.width / 2;
-    self.layer.masksToBounds = true
+    self.clipsToBounds = true
+//    self.layer.masksToBounds = true
   }
 }
