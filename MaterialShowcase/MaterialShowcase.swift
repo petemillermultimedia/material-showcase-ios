@@ -7,7 +7,7 @@
 //
 import UIKit
 
-@objc public protocol MaterialShowcaseDelegate: class {
+@objc public protocol MaterialShowcaseDelegate: NSObjectProtocol {
   @objc optional func showCaseWillDismiss(showcase: MaterialShowcase)
   @objc optional func showCaseDidDismiss(showcase: MaterialShowcase)
 }
@@ -70,7 +70,7 @@ public class MaterialShowcase: UIView {
   public var aniRippleColor: UIColor!
   public var aniRippleAlpha: CGFloat!
   // Delegate
-  public var delegate: MaterialShowcaseDelegate?
+  public weak var delegate: MaterialShowcaseDelegate?
   
   public init() {
     // Create frame
