@@ -193,7 +193,7 @@ extension MaterialShowcase {
       addSecondaryLabel(at: center)
     
       // Add gesture recognizer for both container and its subview
-      addGestureRecognizer(tapGestureRecoganizer())
+      addGestureRecognizer(tapGestureRecognizer())
       // Disable subview interaction to let users click to general view only
       for subView in subviews {
         subView.isUserInteractionEnabled = false
@@ -305,7 +305,7 @@ extension MaterialShowcase {
   }
   
   // Handles user's tap
-  private func tapGestureRecoganizer() -> UIGestureRecognizer {
+  private func tapGestureRecognizer() -> UIGestureRecognizer {
     let tapGesture = UITapGestureRecognizer(target: self, action: #selector(completeShowcase))
     tapGesture.numberOfTapsRequired = 1
     tapGesture.numberOfTouchesRequired = 1
@@ -314,7 +314,7 @@ extension MaterialShowcase {
   
   // Default action when dimissing showcase
   // Notifies delegate, removes views, and handles out-going animation
-  func completeShowcase() {
+  @objc func completeShowcase() {
     if delegate != nil && delegate?.showCaseDidDismiss != nil {
       delegate?.showCaseWillDismiss!(showcase: self)
     }
